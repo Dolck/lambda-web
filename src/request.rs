@@ -36,9 +36,9 @@ pub(crate) struct ApiGatewayV2RequestContext<'a> {
     // pub account_id: String,
     // The identifier API Gateway assigns to your API.
     // pub api_id: String,
-    // The stringified value of the specified key-value pair of the context map returned from an API Gateway Lambda authorizer function.
-    // #[serde(default)]
-    // pub authorizer: HashMap<String, serde_json::Value>,
+    /// The stringified value of the specified key-value pair of the context map returned from an API Gateway Lambda authorizer function.
+    #[serde(default)]
+    pub authorizer: HashMap<String, serde_json::Value>,
     /// The full domain name used to invoke the API. This should be the same as the incoming Host header.
     pub(crate) domain_name: Cow<'a, str>,
     // The first label of the $context.domainName. This is often used as a caller/customer identifier.

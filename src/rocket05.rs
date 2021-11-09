@@ -142,12 +142,20 @@ impl TryFrom<ApiGatewayV2<'_>> for RequestDecode {
             vec![]
         };
 
+        let mut auth_headers = event.request_context.authorizer.iter()
+            // Should be ok to unwrap auth-context as it came as json
+            .map(|(k, v)| (k, serde_json::to_string(v).unwrap()))
+            .map(|(k, v)| Header::new(k.to_string(), v))
+            .collect::<Vec<Header>>();
+
         // Headers
-        let headers = event
+        let mut headers = event
             .headers
             .iter()
             .map(|(k, v)| Header::new(k.to_string(), v.to_string()))
             .collect::<Vec<Header>>();
+
+        headers.append(&mut auth_headers);
 
         // Body
         let body = if let Some(eventbody) = event.body {
